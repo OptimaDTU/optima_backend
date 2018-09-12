@@ -1,11 +1,11 @@
-VIDEO = 'video'
+IMAGE = 'image'
 PDF = 'pdf'
 NOTEBOOK = 'notebook'
 CODE = 'code'
 OTHER = 'other'
 
 ResourceTypeChoices = (
-    (VIDEO, VIDEO),
+    (IMAGE, IMAGE),
     (PDF, PDF),
     (NOTEBOOK, NOTEBOOK),
     (CODE, CODE),
