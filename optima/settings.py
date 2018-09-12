@@ -24,7 +24,7 @@ SECRET_KEY = 'akgms_01lu9se%-ey4p3%-)$pum@oxi#_95oy$5ikzg6m67b=4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
