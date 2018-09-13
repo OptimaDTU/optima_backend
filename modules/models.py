@@ -7,10 +7,14 @@ from modules.utils import ResourceTypeChoices
 class Module(models.Model):
     title = models.CharField(max_length=250, unique=True)
     description = models.TextField()
+    rank = models.PositiveIntegerField()
     slug = models.SlugField(max_length=250, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
     curators = models.ManyToManyField('accounts.Profile', related_name='modules', blank=True)
+
+    class Meta:
+        ordering = ('rank',)
 
     def __str__(self):
         return self.title
@@ -25,13 +29,17 @@ class Video(models.Model):
     creator = models.ForeignKey('accounts.Profile', null=True, on_delete=models.SET_NULL, related_name='videos')
     title = models.CharField(max_length=250)
     description = models.TextField()
+    rank = models.PositiveIntegerField()
     url = models.URLField(blank=True, null=True)
     next_video = models.OneToOneField('self', blank=True, null=True, on_delete=models.SET_NULL,
                                       related_name='previous_video')
-    tags = models.ManyToManyField('Tag', related_name='videos')
+    tags = models.ManyToManyField('Tag', related_name='videos', blank=True)
     slug = models.SlugField(max_length=250, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    class Meta:
+        ordering = ('rank',)
 
     def __str__(self):
         return self.title
