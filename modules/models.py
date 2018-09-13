@@ -26,10 +26,8 @@ class Video(models.Model):
     title = models.CharField(max_length=250)
     description = models.TextField()
     url = models.URLField(blank=True, null=True)
-    previous_video = models.ForeignKey('self', blank=True, null=True, on_delete=models.SET_NULL,
-                                       related_name='next_videos')
-    next_video = models.ForeignKey('self', blank=True, null=True, on_delete=models.SET_NULL,
-                                   related_name='previous_videos')
+    next_video = models.OneToOneField('self', blank=True, null=True, on_delete=models.SET_NULL,
+                                      related_name='previous_video')
     tags = models.ManyToManyField('Tag', related_name='videos')
     slug = models.SlugField(max_length=250, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
