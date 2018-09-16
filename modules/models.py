@@ -1,3 +1,5 @@
+import re
+
 from django.db import models
 from django.template.defaultfilters import slugify
 
@@ -7,6 +9,7 @@ from modules.utils import ResourceTypeChoices
 class Module(models.Model):
     title = models.CharField(max_length=250, unique=True)
     description = models.TextField()
+    thumbnail = models.URLField(blank=True, null=True)
     rank = models.PositiveIntegerField()
     slug = models.SlugField(max_length=250, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -31,6 +34,7 @@ class Video(models.Model):
     description = models.TextField()
     rank = models.PositiveIntegerField()
     url = models.URLField(blank=True, null=True)
+    thumbnail = models.URLField(blank=True, null=True)
     next_video = models.OneToOneField('self', blank=True, null=True, on_delete=models.SET_NULL,
                                       related_name='previous_video')
     tags = models.ManyToManyField('Tag', related_name='videos', blank=True)
@@ -45,7 +49,17 @@ class Video(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        # set video slug
         self.slug = slugify(self.title)
+
+        # remove self referential case
+        if self.next_video == self:
+            self.next_video = None
+
+        # set video thumbnail url
+        if self.url:
+            video_id = re.findall(r'((?<=([vV])/)|(?<=be/)|(?<=([?&])v=)|(?<=embed/))([\w-]+)', self.url)
+            self.thumbnail = "https://img.youtube.com/vi/{}/0.jpg".format(video_id)
         super(Video, self).save(*args, **kwargs)
 
 
