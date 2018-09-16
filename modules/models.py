@@ -58,8 +58,11 @@ class Video(models.Model):
 
         # set video thumbnail url
         if self.url:
-            video_id = re.findall(r'((?<=([vV])/)|(?<=be/)|(?<=([?&])v=)|(?<=embed/))([\w-]+)', self.url)
-            self.thumbnail = "https://img.youtube.com/vi/{}/0.jpg".format(video_id)
+            try:
+                video_id = re.findall(r'((?<=([vV])/)|(?<=be/)|(?<=([?&])v=)|(?<=embed/))([\w-]+)', self.url)[0][-1]
+                self.thumbnail = "https://img.youtube.com/vi/{}/0.jpg".format(video_id)
+            except IndexError:
+                pass
         super(Video, self).save(*args, **kwargs)
 
 
