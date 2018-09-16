@@ -13,7 +13,7 @@ class ModuleListView(ListAPIView):
     def get_queryset(self):
         if self.request.GET.get('tags'):
             tags = self.request.GET['tags'].split(',')
-            return Module.objects.filter(videos__tags__slug__in=tags)
+            return Module.objects.filter(videos__tags__slug__in=tags).distinct().order_by('rank')
         return Module.objects.all()
 
     @method_decorator(cache_page(60 * 15))
